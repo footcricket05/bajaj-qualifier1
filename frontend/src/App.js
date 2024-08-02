@@ -10,8 +10,13 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state
-    setResponseData(null); // Reset response data state
+    setError(null);
+    setResponseData(null);
+
+    if (!jsonData.trim()) {
+      setError('JSON input cannot be empty.');
+      return;
+    }
 
     let parsedData;
     try {
@@ -22,14 +27,15 @@ function App() {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/bfhl', parsedData, {
+      // Update the URL to your deployed Netlify function
+      const response = await axios.post('https://bajajqualifier-1.netlify.app/.netlify/functions/bfhl', parsedData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
       setResponseData(response.data);
     } catch (error) {
-      setError('An error occurred. Please check your input and try again.');
+      setError('An error occurred while making the request. Please check your input and try again.');
       console.error('Error making request:', error);
     }
   };
@@ -48,6 +54,8 @@ function App() {
             value={jsonData}
             onChange={(e) => setJsonData(e.target.value)}
             placeholder='Enter JSON here'
+            rows="10"
+            cols="50"
           />
           <button type="submit">Submit</button>
         </form>
@@ -55,7 +63,7 @@ function App() {
         {responseData && (
           <>
             <h2>Response Data</h2>
-            <select multiple onChange={handleSelectChange}>
+            <select multiple onChange={handleSelectChange} value={selectedOptions}>
               <option value="numbers">Numbers</option>
               <option value="alphabets">Alphabets</option>
               <option value="highest_alphabet">Highest Alphabet</option>
@@ -64,19 +72,19 @@ function App() {
               {selectedOptions.includes('numbers') && (
                 <div>
                   <h3>Numbers</h3>
-                  <p>{JSON.stringify(responseData.numbers)}</p>
+                  <p>{responseData.numbers.length > 0 ? JSON.stringify(responseData.numbers) : 'No numbers found.'}</p>
                 </div>
               )}
               {selectedOptions.includes('alphabets') && (
                 <div>
                   <h3>Alphabets</h3>
-                  <p>{JSON.stringify(responseData.alphabets)}</p>
+                  <p>{responseData.alphabets.length > 0 ? JSON.stringify(responseData.alphabets) : 'No alphabets found.'}</p>
                 </div>
               )}
               {selectedOptions.includes('highest_alphabet') && (
                 <div>
                   <h3>Highest Alphabet</h3>
-                  <p>{JSON.stringify(responseData.highest_alphabet)}</p>
+                  <p>{responseData.highest_alphabet.length > 0 ? JSON.stringify(responseData.highest_alphabet) : 'No highest alphabet found.'}</p>
                 </div>
               )}
             </div>

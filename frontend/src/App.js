@@ -27,6 +27,7 @@ function App() {
     }
 
     try {
+      // Update the URL to your deployed Netlify function
       const response = await axios.post('https://bajajqualifier-1.netlify.app/.netlify/functions/bfhl', parsedData, {
         headers: {
           'Content-Type': 'application/json',
@@ -45,49 +46,45 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <header className="mt-5">
-        <h1 className="text-center mb-4">JSON Input</h1>
-        <form onSubmit={handleSubmit} className="mb-4">
-          <div className="form-group">
-            <textarea
-              className="form-control"
-              value={jsonData}
-              onChange={(e) => setJsonData(e.target.value)}
-              placeholder='Enter JSON here'
-              rows="5"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block">Submit</button>
+    <div className="App">
+      <header className="App-header">
+        <h1>JSON Input</h1>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            value={jsonData}
+            onChange={(e) => setJsonData(e.target.value)}
+            placeholder='Enter JSON here'
+            rows="10"
+            cols="50"
+          />
+          <button type="submit">Submit</button>
         </form>
-        {error && <p className="text-danger text-center">{error}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         {responseData && (
           <>
-            <h2 className="text-center mt-4">Filtered Response</h2>
-            <div className="form-group">
-              <select multiple onChange={handleSelectChange} value={selectedOptions} className="form-control">
-                <option value="numbers">Numbers</option>
-                <option value="alphabets">Alphabets</option>
-                <option value="highest_alphabet">Highest Alphabet</option>
-              </select>
-            </div>
-            <div className="mt-4">
+            <h2>Response Data</h2>
+            <select multiple onChange={handleSelectChange} value={selectedOptions}>
+              <option value="numbers">Numbers</option>
+              <option value="alphabets">Alphabets</option>
+              <option value="highest_alphabet">Highest Alphabet</option>
+            </select>
+            <div>
               {selectedOptions.includes('numbers') && (
                 <div>
                   <h3>Numbers</h3>
-                  <p>{responseData.numbers.length > 0 ? responseData.numbers.join(', ') : 'No numbers found.'}</p>
+                  <p>{responseData.numbers.length > 0 ? JSON.stringify(responseData.numbers) : 'No numbers found.'}</p>
                 </div>
               )}
               {selectedOptions.includes('alphabets') && (
                 <div>
                   <h3>Alphabets</h3>
-                  <p>{responseData.alphabets.length > 0 ? responseData.alphabets.join(', ') : 'No alphabets found.'}</p>
+                  <p>{responseData.alphabets.length > 0 ? JSON.stringify(responseData.alphabets) : 'No alphabets found.'}</p>
                 </div>
               )}
               {selectedOptions.includes('highest_alphabet') && (
                 <div>
                   <h3>Highest Alphabet</h3>
-                  <p>{responseData.highest_alphabet.length > 0 ? responseData.highest_alphabet.join(', ') : 'No highest alphabet found.'}</p>
+                  <p>{responseData.highest_alphabet.length > 0 ? JSON.stringify(responseData.highest_alphabet) : 'No highest alphabet found.'}</p>
                 </div>
               )}
             </div>

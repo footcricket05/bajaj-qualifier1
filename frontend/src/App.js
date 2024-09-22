@@ -27,7 +27,6 @@ function App() {
     }
 
     try {
-      // Update the URL to your deployed Netlify function
       const response = await axios.post('https://bajajqualifier-1.netlify.app/.netlify/functions/bfhl', parsedData, {
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +35,6 @@ function App() {
       setResponseData(response.data);
     } catch (error) {
       setError('An error occurred while making the request. Please check your input and try again.');
-      console.error('Error making request:', error);
     }
   };
 
@@ -48,7 +46,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>JSON Input</h1>
+        <h1>RA2111047010113</h1>  {/* Set as per roll number */}
         <form onSubmit={handleSubmit}>
           <textarea
             value={jsonData}
@@ -66,7 +64,7 @@ function App() {
             <select multiple onChange={handleSelectChange} value={selectedOptions}>
               <option value="numbers">Numbers</option>
               <option value="alphabets">Alphabets</option>
-              <option value="highest_alphabet">Highest Alphabet</option>
+              <option value="highest_lowercase_alphabet">Highest Lowercase Alphabet</option>
             </select>
             <div>
               {selectedOptions.includes('numbers') && (
@@ -81,10 +79,10 @@ function App() {
                   <p>{responseData.alphabets.length > 0 ? JSON.stringify(responseData.alphabets) : 'No alphabets found.'}</p>
                 </div>
               )}
-              {selectedOptions.includes('highest_alphabet') && (
+              {selectedOptions.includes('highest_lowercase_alphabet') && (
                 <div>
-                  <h3>Highest Alphabet</h3>
-                  <p>{responseData.highest_alphabet.length > 0 ? JSON.stringify(responseData.highest_alphabet) : 'No highest alphabet found.'}</p>
+                  <h3>Highest Lowercase Alphabet</h3>
+                  <p>{responseData.highest_lowercase_alphabet.length > 0 ? JSON.stringify(responseData.highest_lowercase_alphabet) : 'No highest lowercase alphabet found.'}</p>
                 </div>
               )}
             </div>
